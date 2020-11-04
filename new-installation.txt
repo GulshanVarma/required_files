@@ -1,0 +1,26 @@
+sudo apt install chromium-browser
+
+sudo apt install vlc
+
+sudo apt install software-properties-common apt-transport-https wget
+wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+sudo apt-get update
+sudo apt install code
+>> pitch-black, dark - naruto
+>> git
+>>react snippets
+
+sudo apt-get install git
+
+sudo apt-get install python3-pip
+
+sudo apt install gnome-shell-extension-autoh
+sudo apt-get install gnome-tweak-tool
+>>alt+f2 > r > enter
+>>goto tweak>ext>hide taskbar
+sudo apt-get install notepad++
+
+sudo apt install nodejs
+
+sudo apt install npm
