@@ -1,0 +1,172 @@
+//============================================================================
+// Name        : testaaaaa.cpp
+// Author      : Gulshan Varma
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+#include <vector>
+#include <typeinfo>
+#include <map>
+#include <set>
+#include <stdlib.h>
+#include <time.h>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+	int data[] = {212,123,212,314,8145,4,56,4};
+	vector <int> vv({1,2,3,4});
+	vector <int> vv1(data,data+sizeof(data)/sizeof(data[0]));
+	vector <int> vv2(data,data+sizeof(data)/sizeof(data[0]));
+
+	map <int,int> map_test;
+	map_test.insert({2222,3333});
+
+	cout<<endl<<"vv"<<endl;
+	for(auto i : vv){
+		cout<<i<<endl;
+	}
+
+	cout<<endl<<"vv1"<<endl;
+	for(auto i : vv1){
+		cout<<i<<endl;
+	}
+
+	cout<<endl<<"map_test";
+	for(auto i: map_test){
+		cout<<i.first<<" , "<<i.second;
+	}
+
+	cout<<endl<<"size = "<<typeid(data+sizeof(data)/sizeof(data[0])).name();
+
+
+	string sent = "a apple 12 keeps 3 doctor away";
+	int ans = 4; // 12/3
+	string ans1,word;
+
+	vector <int> test;
+	for(char c : sent+" "){
+		if(int(c) == 32){
+			if(word[0] < 65) test.push_back(std::stoi(word));
+			else ans1.append(word+" ");
+			cout<<endl<<word;
+			word = "";
+		}else{
+			word += c;
+		}
+	}
+	cout<<endl<<ans1;
+	for(auto i : test){
+		cout<<endl<<i;
+	}
+
+	// init starting point of random generator
+	srand(time(0));
+	cout<<endl<<"random shit";
+	for(int i=0;i<10;i++){
+		cout<<endl<<"r = "<<rand()%10;
+	}
+
+
+	// sortings
+	std::sort(vv2.rbegin(),vv2.rend(),std::greater<int>());
+	cout<<endl<<"vv2 sorted"<<endl;
+	for(auto i : vv2){
+		cout<<i<<endl;
+	}
+
+	// sort by string len in vector
+	vector <string> v_str = {"aaaaa","b","cccc","dddsdsdsdsd"};
+	std::sort(v_str.begin(),v_str.end(),[](string first,string second){
+		return first.size() < second.size();
+	});
+	cout<<endl<<"sort str be len"<<endl;
+	for(auto i : v_str){
+		cout<<endl<<i;
+	}
+
+	cout<<endl<<"max = "<<*std::max_element(vv1.begin(),vv1.end());
+	cout<<endl<<"max by length= "<<*std::max_element(v_str.begin(),v_str.end(),[](string one, string two){
+		return one.size() < two.size();
+	});
+
+
+	// finding element in vector {212,123,314,8145,56,4};
+		// if found -> index, not found size() or end()-begin() or (ind!=end(vv1))
+	int num = 81450;
+	if(std::binary_search(vv1.begin(),vv1.end(),num)){
+		cout<<endl<<"exist "<<num;
+		auto index = std::find(vv1.begin(),vv1.end(),num) - vv1.begin();  // pos - start
+		cout<<endl<<"elem found at - > "<<index<<", end = "<<vv1.end()-vv1.begin();
+	}else cout<<endl<<"does not exist "<<num;
+
+
+	//finding seq in vector
+	vector <int> v_seq = {314,8145,56};
+	auto result = std::search(vv1.begin(),vv1.end(),v_seq.begin(),v_seq.end());
+	if (result == vv1.end())
+		cout<<endl<<"seq not found";
+	else cout<<endl<<"seq found in vv1 at "<<result-vv1.begin();
+
+	//find char seq in string
+	string s_str = "i am a man who swim and man who eat an apple";
+	string s_seq = "man who eat";
+	auto s_result = std::search(s_str.begin(),s_str.end(),s_seq.begin(),s_seq.end());
+	if (s_result == s_str.end())
+		cout<<endl<<"seq not found";
+	else cout<<endl<<"seq found in vv1 at "<<s_result-s_str.begin();
+
+	// count
+	auto res_count = std::count(vv1.begin(),vv1.end(),4);
+	cout<<endl<<"4 repeats for "<<res_count;
+
+	//unique - remove duplicates
+	vector <int> v_uniq = {12,1,34,12,56,1,66};
+	std::sort(v_uniq.begin(),v_uniq.end());			//1
+	v_uniq.erase( std::unique( v_uniq.begin(), v_uniq.end() ), v_uniq.end() ); //2
+	//unique can remove dup. elem next to cur. elem
+	cout<<endl<<"uniq"<<endl;
+	for(auto i : v_uniq){
+		cout<<endl<<i;
+	}
+
+	// when duplicates are of enormous amount
+	cout<<endl<<"uniq - set"<<endl;
+	vector <int> v_uniq1 = {12,1,34,12,56,1,66};
+	set<int> set_test;
+	for(auto i : v_uniq1){				// 1. put vect in set
+		set_test.insert(i);
+	}
+	v_uniq1.assign(set_test.begin(),set_test.end());	// 2. assign set to vect back
+	for(auto i : v_uniq1){
+		cout<<endl<<i;
+	}
+
+
+	// slicing (start,offset)
+	cout<<endl<<"slicings --- ";
+	string test_slice = "abcdefghijklmno";
+	cout<<endl<<test_slice.substr();
+	cout<<endl<<test_slice.substr(4,3);
+	cout<<endl<<test_slice.substr(0,3);
+	cout<<endl<<test_slice.substr(test_slice.size()-3,3);
+
+
+	// create map of 2 vectors
+	// map keys into a vector
+	return 0;
+}
+
+// calling kinda struct constructor
+//
+//struct greater
+//{
+//    template<class T>
+//    bool operator()(T const &a, T const &b) const { return a > b; }
+//};
+//
+//std::sort(numbers.begin(), numbers.end(), greater());
