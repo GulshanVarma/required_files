@@ -1,0 +1,153 @@
+>>	npm install --save redux react-redux
+
+1) Action Types		------------------------------------------------------------------------------------------
+
+>> 	export const ADD_INGREDIENT = 'ADD_INGREDIENT';
+
+2) Action Creators	------------------------------------------------------------------------------------------
+
+>> 	import * as actionTypes from './actionTypes';
+>> 	export const setIngredients = ( ingredients ) => {
+		return {
+			type: actionTypes.SET_INGREDIENTS,
+			ingredients: ingredients
+		};
+	};
+
+>>	export const fetchIngredientsFailed = () => {
+		return {
+			type: actionTypes.FETCH_INGREDIENTS_FAILED
+		};
+	};
+
+>>	export const initIngredients = () => {
+		return dispatch => {
+			axios.get( 'https://burger-mark-1.firebaseio.com/ingredients.json' )
+				.then( response => {
+				   dispatch(setIngredients(response.data));
+				} )
+				.catch( error => {
+					dispatch(fetchIngredientsFailed());
+				} );
+		};
+	};
+
+3) Create Reducers 	---------------------------------------------------------------------------------------------
+--------------simple-----------
+import * as actionTypes from './actions';
+
+const initialState = {
+    ingredients: {
+        salad: 0,
+        bacon: 0,
+        cheese: 0,
+        meat: 0
+    },	
+    totalPrice: 4
+};
+
+const reducer = ( state = initialState, action ) => {
+    switch ( action.type ) {
+        case actionTypes.ADD_INGREDIENT:
+            return {								// update state without setState()
+                ...state,
+                ingredients: {						// careful at returning datatype {},[],...
+                    ...state.ingredients,
+                    [action.ingredientName]: state.ingredients[action.ingredientName] + 1
+                },
+                totalPrice: state.totalPrice + 5
+            };
+        default:
+            return state;
+    }
+};
+
+export default reducer;
+----------------------
+>>	const reducer = ( state = initialState, action ) => {
+		switch ( action.type ) {
+			case actionTypes.ADD_INGREDIENT: return addIngredient( state, action );
+			case actionTypes.REMOVE_INGREDIENT: return removeIngredient(state, action);
+			case actionTypes.SET_INGREDIENTS: return setIngredients(state, action);    
+			case actionTypes.FETCH_INGREDIENTS_FAILED: return fetchIngredientsFailed(state, action);
+			default: return state;
+		}
+	};
+
+
+
+4) Index of Action Creators	-------------------------------------------------------------------------------------
+
+>>	export {
+		addIngredient,
+		removeIngredient,
+		initIngredients
+	} from './burgerBuilder';
+	
+	
+5) In Index.js, setting up Redux + thunk	------------------------------------------------------------------------
+--------------simple--------------
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducer from './store/R_tictactoe';
+
+const store = createStore(reducer);
+
+ReactDOM.render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>,
+  document.getElementById('root')
+);
+--------------------------------
+>> 	import { Provider } from 'react-redux';
+	import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+	import thunk from 'redux-thunk';
+
+>>	const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;	// for thunk and dev tools
+
+>>	const rootReducer = combineReducers({
+		burgerBuilder: burgerBuilderReducer,
+		order: orderReducer,
+		auth: authReducer
+	});
+
+>>	const store = createStore(rootReducer, composeEnhancers(
+		applyMiddleware(thunk)
+	));
+
+>>	const app = (
+		<Provider store={store}>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</Provider>
+	);
+
+6) In Component add Store 	-----------------------------------------------------------------------------------------
+
+>>	import { connect } from 'react-redux';
+>>	import * as actions from '../../store/actions/index';
+
+>> 	this.props.onInitIngredients();					//usage
+
+>>	const mapStateToProps = state => {
+		return {
+			ings: state.burgerBuilder.ingredients,				// reducer state name, make spelling right
+			isAuthenticated: state.auth.token !== null
+		};
+	}
+	
+>>	const mapDispatchToProps = dispatch => {
+		return {
+			onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),		//() is IMP, arguments are mostly passed in children components, not in this class comp.
+//			onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),	 -------- without AC 
+			onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName))
+		}
+	}
+
+>>	export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler( BurgerBuilder, axios ))
+
+

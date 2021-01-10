@@ -1,0 +1,130 @@
+mkdir backend
+cd backend
+pipenv install django
+pipenv shell
+django-admin startproject todolist .	// startapp for application
+------------------------------------------------------------------------
+// for convinience 
+
+# backend/todolist/----SETTING.PY----
+# insert these lines after the definition of BASE_DIR
+BASE_DIR = Path(__file__).resolve().parent.parent
+FRONT_END = ''.join([str(BASE_DIR),'\\','frontend']) 
+
+# modify the definition of DEBUG and ALLOWED_HOSTS
+DEBUG = os.environ.get('DJANGO_ENV') == 'development'
+ALLOWED_HOSTS = ['localhost']
+------------------------------------------------------------------------
+./manage.py migrate
+./manage.py runserver
+------------------------------------------------------------------------
+Open http://localhost:8000/ in a browser to confirm that everything is working.
+------------------------------------------------------------------------
+//REACT
+npx create-react-app frontend
+cd frontend
+------------------------------------------------------------------------
+//folder
+>api_project_dj
+	>api_project_dj
+	>frontend
+		>build
+		>src , etc
+	>restAPI	-- django application
+	>static
+	>manage.py
+	>server.py
+	
+------------------------------------------------------------------------
+// Let’s add a view that renders the index.html
+// A catchall URL pattern routes any unrecognized URL with that view. (support REACT Routing)
+// Then the frontend URL router takes over and renders the appropriate page on the client side.
+
+# backend/todolist/settings.py	--
+TEMPLATES = [
+    {
+        'DIRS': [''.join([str(FRONT_END),'\\build'])],
+        ...,
+    },
+]
+------------------------------------------------------------------------
+# backend/todolist/views.py	--
+from django.views.generic import TemplateView
+catchall = TemplateView.as_view(template_name='index.html')	
+------------------------------------------------------------------------
+# backend/todolist/urls.py	--
+from django.contrib import admin
+from django.urls import path, re_path
+from . import views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    re_path(r'', views.catchall),
+]
+------------------------------------------------------------------------
+// BUILD FRONTEND
+------------------------------------------------------------------------
+>> pipenv install waitress
+//create server.py
+
+#explicitly for react to host app with react
+#waitress
+from waitress import serve
+from api_project_dj.wsgi import application
+if __name__ == '__main__':
+    serve(application, port='8000')
+
+>> python server.py
+------------------------------------------------------------------------
+---------- till now , loads HTML withour JS	---------------------------
+------------------------------------------------------------------------
+// tasks
+Configure django.contrib.staticfiles and WhiteNoise;
+Declare that frontend/build/static/ contains static files;
+Serve them at /static/ where create-react-app expects them;5
+Serve the few other files in the frontend/build/ directory at the server root.6
+
+# backend/todolist/settings.py ---
+INSTALLED_APPS = [
+    ...,
+    # before django.contrib.staticfiles
+    'whitenoise.runserver_nostatic',
+    ...
+]
+
+MIDDLEWARE = [
+    ...,
+    # just after django.middleware.security.SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    ...,
+]
+
+STATICFILES_DIRS = [''.join([str(FRONT_END), '\\build', '\\static'])]
+
+STATICFILES_STORAGE = (
+    'whitenoise.storage.CompressedManifestStaticFilesStorage')
+
+STATIC_ROOT = ''.join([str(BASE_DIR), '\\static'])
+
+STATIC_URL = '/static/'
+
+WHITENOISE_ROOT = [''.join([str(FRONT_END), '\\build', '\\root'])]
+
+------------------------------------------------------------------------
+
+cd build
+mkdir root
+mv *.ico *.js *.json root		// mv seperately
+cd ..
+
+------------------------------------------------------------------------
+// Stop the WSGI server, install WhiteNoise, collect static files, and restart the server
+pipenv install whitenoise
+./manage.py collectstatic
+python server.py
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
