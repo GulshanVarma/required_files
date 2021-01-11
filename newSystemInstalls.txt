@@ -25,14 +25,20 @@ sudo apt install nodejs
 
 sudo apt install npm
 
+// notepad++ or Sublime
+// java jdk
 // anydesk
 // flask, pip
-// pycharm / sublime 
+// pycharm -- optional 
 // mysql server
 // noip hosting app
 // curl - to fetch content
+// eclipse -- optional
+// soap ui
+// xampp  -- php,sql
+// xmind flowchart app
 
-
+// vpn
 // telegram
 // steam - csgo
 
