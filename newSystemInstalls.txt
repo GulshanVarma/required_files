@@ -24,3 +24,9 @@ sudo apt-get install notepad++
 sudo apt install nodejs
 
 sudo apt install npm
+
+// anydesk
+// flask, pip
+// 
+// steam - csgo
+
