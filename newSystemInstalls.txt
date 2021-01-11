@@ -27,6 +27,13 @@ sudo apt install npm
 
 // anydesk
 // flask, pip
-// 
+// pycharm / sublime 
+// mysql server
+// noip hosting app
+// curl - to fetch content
+
+
+// telegram
 // steam - csgo
+
 
