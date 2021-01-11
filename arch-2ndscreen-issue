@@ -1,0 +1,10 @@
+Uncomment line in file
+/etc/UPower/UPower.conf
+
+    IgnoreLid=true
+
+And you could disable built-in laptop display in Display settings near selectbox with display name.
+Or make external default one. That’s need in case when some prompt window appears, like prompt for entering password in Firefox etc.
+
+
+sudo systemctl restart upower.service
