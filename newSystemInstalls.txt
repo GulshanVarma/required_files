@@ -1,3 +1,7 @@
+git clone http.....
+cd pkg_name
+makepkg -si
+
 sudo apt install chromium-browser
 
 sudo apt install vlc
