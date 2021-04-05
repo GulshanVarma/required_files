@@ -1,13 +1,21 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
 //-------------------------------------------------------------------------------------------------- function replace by ()=>{}
 
+// jquery selections $() - jq objects
+$("h1") - Most jQuery methods are called on jQuery objects as shown above; these methods are said to be part of the 
+>>>>>>>>>$.fn namespace <<<<<<<<<<<<<
+or the "jQuery prototype," and are best thought of as jQuery object methods.
+
+
+
 //------------------------------------------------------------------------------------------------checking element presence
  $(), an object is always returned, and objects always evaluate to true.
 if ( $( "div.foo" ).length ) {
     ...
 }
 
-
+	
+$( "input[name='first_name']" );	// geting attribute
 $( "form :checked" );	//checking atribute in form
 
 
@@ -48,8 +56,6 @@ $( "<a/>", {
     "class": "new",
     href: "foo.html"
 });
-
-
 
 
 
@@ -154,7 +160,7 @@ $(document).ready(function(){
 });
 
 
-//--------------------------------------------------------------------------------- scroll to element (scrollTop)
+//--------------------------------------------------------------------------------- scroll to element (scrollTop) >> ANIMATE <<
 $(document).ready(function (){
     $("#click").click(function (){
         $('html, body').animate({
@@ -184,10 +190,18 @@ $(function(){
           myItems.push( "<li>item " + i + "</li>" );
         }
 		$("#p1").append( myItems.join( "" ) );				// inside <p1> at end	[or prepend for top of <p1> in p1]
+		
 		//or $("#p1").after( myItems.join( "" ) );			// after <p1>
 		//or $("#p1").html( myItems.join( "" ) );			// HTML replace #p1 with content
     })
 })
+
+
+$('#p1').html(["test1","test2","test3","test4"].join('<br />')).appendTo(document.body);
+
+//chaining
+$("#p1").css("color", "red").slideUp(2000).slideDown(2000);
+
 
 
 //-------------------------------------------------------------------------LOOP
@@ -196,4 +210,89 @@ var supercarObject = {"brand": "Lamborghini", "model" : "Huracan", "origin": "It
 $.each(supercarObject, function(key, value){
     $("#result").append(key + ": " + value + '<br>');
 });
+
+
+
+//-------------------------------------------------------------------------catch INPUT on button click (VAL - for forms only)
+$(document).ready(function(){
+  $("button").click(function(){
+    alert("Value: " + $("#test").val(/*  passing here sets value  */));			// gets input value
+    alert("HTML: " + $("#test").html());					// get/set html code of element
+    alert("HTML: " + $("#test").text());					// get/set as shown on browser
+    alert($("#w3s").attr("href"));							// show href value
+  });
+});
+
+<p>Name: <input type="text" id="test" value="Mickey Mouse">
+
+// ------- set value
+$("#btn2").click(function(){
+    $("#test2").html(function(i, origText){
+      return "Old html: " + origText + " New html: Hello <b>world!</b> (index: " + i + ")"; 
+    });
+  });
+
+
+// ------- remove items
+remove() - Removes the selected element (and its child elements)		//$("p").remove(".test, .demo");	by classname
+empty() - Removes the child elements from the selected element
+
+//-------------------------------------------------------------------------------------- CSS CLASSES ADD/DEL/MOD
+.important {
+  font-weight: bold;
+  font-size: xx-large;
+}
+
+.blue {
+  color: blue;
+}
+
+
+$("h1, h2, p").addClass("blue");
+$("div").addClass("important");
+$("h1, h2, p").removeClass("blue");
+$("h1, h2, p").toggleClass("blue");			// add/rem css class
+
+.css({ /* add css style here*/});
+
+
+$("#div1").width() // get/set
+$("#div1").height()
+
+$( "#myDiv" ).is( ":visible" );			// DETERMINE STATE OF ELEMENT [is()]
+
+
+$(document).ready(function (){					// ANIMATE EFFECT
+    $("#click").click(function (){
+        $('html, body').animate({
+            scrollTop: $("#div1").offset().top
+        }, 1000);
+    });
+});
+
+//---------------------------------------------------------------------------------------- // TRAVERSING
+ $("span").parent();
+
+ $("div").children();
+ $("div").find("span").css({"color": "red", "border": "2px solid red"});
+
+// within same element
+ .siblings()	// all
+ .next()		// one
+
+// filtering search
+$("div").first();
+$("div").last();
+
+
+
+//	.class 				.intro				Selects all elements with class="intro"
+//	.class1.class2		.name1.name2		Selects all elements with both name1 and name2 set within its class attribute
+//	.class1 .class2		.name1 .name2		Selects all elements with name2 that is a descendant of an element with name1	
+//	#id					#firstname			Selects the element with id="firstname"
+-- //	*					*				Selects all elements (child elements too)
+//	element				p					Selects all <p> elements
+//	element.class		p.intro				Selects all <p> elements with class="intro"
+//	element,element		div, p				Selects all <div> elements and all <p> elements
+//	element element		div p				Selects all <p> elements inside <div> elements
 
