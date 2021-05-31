@@ -1,0 +1,16 @@
+Node.js works under the hood is it’s single threaded, event loop based apparatus for achieving asynchronous behaviour
+
+each browser have its own javascriipt engine, Node.js is essentially a Javascript runtime built on top of Chrome’s V8 Javascript engine
+
+users of nodejs - Netflix, Linkedin, Microsoft, GoDaddy, Paypal
+
+Node.js is most popular for it’s asynchronous event-driven, non-blocking I/O processing.
+It gets most of this concurrency and asynchronism from Javascript’s single-threaded event loop model.
+
+MULTITHREADED
+Every time the server receives a request from the client, it picks a thread from the pool and assigns it to the client to process request.
+Inside these threads, the processing is SEQUENTIAL and synchronous in nature [ for blocking IO calls ]
+dead-locking, wherein multiple threads are blocked forever in the process of waiting for each other to free up resources.
+
+
+
