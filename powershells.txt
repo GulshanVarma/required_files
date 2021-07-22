@@ -1,0 +1,35 @@
+>>  Get-Process | where {$_.Id -lt 1000}        // find/filter
+>>  Get-Help -Category:Cmdlet | where {$_.Synopsis -eq "Get-Process"}
+Name                              Category  Module                    Synopsis
+----                              --------  ------                    --------
+gps                               Alias                               Get-Process
+
+Start-Process notepad
+start notepad
+
+Stop-Process -Name notepad
+spps -Name notepad
+
+
+>>  Get-Process | Sort-Object -Property Id      // sort
+
+>>  "Hello, World!" | Out-File C:\ps\test.txt     // pipe
+
+<# ... #>    or   #comment
+
+--------------------------------------
+
+Copy-Item C:\Temp\envvariables.csv -Destination C:\Temp\Test\ -Verbose
+
+#call ps from batch
+PowerShell.exe -ExecutionPolicy Unrestricted -File C:\temp\TestPS.ps1
+or
+PowerShell.exe -executionpolicy Unrestricted Invoke-command -scriptblock { 
+Copy-Item C:\temp\10vms.csv -Destination C:\Test1 -Verbose ; 
+Stop-Service Spooler -Verbose ; 
+Stop-Process -Name "Notepad" -Force -Verbose 
+}
+
+#call batch from ps
+Start-Process -FilePath C:\Temp\TestBatch.bat -NoNewWindow
+
